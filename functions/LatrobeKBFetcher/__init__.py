@@ -324,15 +324,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     logging.info(f"{FUNCTION_NAME} - Test mode: processed article {article.get('id', 'unknown')}")
                 else:
                     # Upload to Microsoft upload container (triggers existing FileUploadedFunc)
-                    # Limit to first 5 articles for debugging
-                    if i < 5:
+                    # Test with first 50 articles to ensure pipeline stability
+                    if i < 50:
                         if upload_to_microsoft_pipeline(blob_name, content):
                             processed_count += 1
                             logging.info(f"{FUNCTION_NAME} - Processed article {article.get('id', 'unknown')}")
                         else:
                             errors.append(f"Upload failed for article {article.get('id', 'unknown')}")
                     else:
-                        # Skip the rest in upload mode for debugging
+                        # Skip the rest for now - testing batch of 50
                         break
                 
             except Exception as e:
