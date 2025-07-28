@@ -47,6 +47,10 @@ resource "azurerm_application_insights" "main" {
   application_type    = "web"
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [workspace_id]
+  }
 }
 
 # Azure Function App

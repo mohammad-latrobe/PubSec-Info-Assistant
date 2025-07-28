@@ -118,6 +118,7 @@ module "azure_functions" {
   python_version             = var.python_version
   storage_account_name       = module.storage.storage_account_name
   storage_account_access_key = module.storage.primary_access_key
+  storage_account_id         = module.storage.storage_account_id
   cors_allowed_origins       = var.cors_allowed_origins
 
   # Service endpoints

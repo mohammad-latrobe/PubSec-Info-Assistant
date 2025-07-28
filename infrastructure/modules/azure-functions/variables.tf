@@ -53,6 +53,11 @@ variable "storage_account_access_key" {
   sensitive   = true
 }
 
+variable "storage_account_id" {
+  description = "Resource ID of the storage account for role assignments"
+  type        = string
+}
+
 variable "cors_allowed_origins" {
   description = "List of allowed origins for CORS"
   type        = list(string)
