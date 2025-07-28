@@ -1,0 +1,24 @@
+# Development Environment Configuration
+# Copy this file to terraform.tfvars and update the values
+
+# Basic Configuration
+resource_group_name = "rg-pubsec-ia-dev"
+location           = "East US"
+environment        = "dev"
+project_prefix     = "pubsec-ia"
+
+# LTU API Configuration
+apim_subscription_key = "d1d001e93d6c4698bc954ec2426da2ad"
+
+# Optional: Customize other settings
+# search_sku = "standard"  # or "basic" for lower cost
+# openai_location = "East US"  # specific region for OpenAI if different
+# function_sku = "Y1"  # consumption plan
+
+# Tags
+tags = {
+  Environment = "Development"
+  Project     = "PubSec Information Assistant"
+  Owner       = "Development Team"
+  CostCenter  = "IT-DEV"
+}
