@@ -28,143 +28,142 @@ resource "azurerm_search_service" "main" {
   tags = var.tags
 }
 
-# Search Index (basic structure - can be customized)
-resource "azurerm_search_index" "kb_articles" {
-  name               = var.index_name
-  search_service_id  = azurerm_search_service.main.id
+# Search Index Configuration
+# Note: Azure Search indexes are not directly supported by the AzureRM provider
+# The index will need to be created using the Azure REST API or Azure CLI after deployment
+# Index name: var.index_name (from variables)
+# Search Service: azurerm_search_service.main.name
+#
+# The index should include fields for:
+# - id (key field)
+# - title (searchable text)
+# - content (searchable text) 
+# - chunk_id (filterable)
+# - article_id (filterable, facetable)
+# - security (filterable, facetable)
+# - source_url (retrievable)
+# - created_date (filterable, sortable)
+# - embedding (vector field with dimensions from var.embedding_dimensions)
+#
+# Vector search and semantic search configurations should be included
 
-  fields {
-    name                     = "id"
-    type                     = "Edm.String"
-    key                      = true
-    searchable              = false
-    filterable              = true
-    retrievable             = true
-    sortable                = false
-    facetable               = false
-    analyzer_name           = null
-  }
-
-  fields {
-    name                     = "title"
-    type                     = "Edm.String"
-    key                      = false
-    searchable              = true
-    filterable              = true
-    retrievable             = true
-    sortable                = true
-    facetable               = false
-    analyzer_name           = "standard.lucene"
-  }
-
-  fields {
-    name                     = "content"
-    type                     = "Edm.String"
-    key                      = false
-    searchable              = true
-    filterable              = false
-    retrievable             = true
-    sortable                = false
-    facetable               = false
-    analyzer_name           = "standard.lucene"
-  }
-
-  fields {
-    name                     = "chunk_id"
-    type                     = "Edm.String"
-    key                      = false
-    searchable              = false
-    filterable              = true
-    retrievable             = true
-    sortable                = false
-    facetable               = false
-  }
-
-  fields {
-    name                     = "article_id"
-    type                     = "Edm.String"
-    key                      = false
-    searchable              = false
-    filterable              = true
-    retrievable             = true
-    sortable                = false
-    facetable               = true
-  }
-
-  fields {
-    name                     = "security"
-    type                     = "Edm.String"
-    key                      = false
-    searchable              = false
-    filterable              = true
-    retrievable             = true
-    sortable                = false
-    facetable               = true
-  }
-
-  fields {
-    name                     = "source_url"
-    type                     = "Edm.String"
-    key                      = false
-    searchable              = false
-    filterable              = false
-    retrievable             = true
-    sortable                = false
-    facetable               = false
-  }
-
-  fields {
-    name                     = "created_date"
-    type                     = "Edm.DateTimeOffset"
-    key                      = false
-    searchable              = false
-    filterable              = true
-    retrievable             = true
-    sortable                = true
-    facetable               = false
-  }
-
-  fields {
-    name                     = "embedding"
-    type                     = "Collection(Edm.Single)"
-    key                      = false
-    searchable              = true
-    filterable              = false
-    retrievable             = false
-    sortable                = false
-    facetable               = false
-    vector_search_dimensions = var.embedding_dimensions
-  }
-
-  # Vector search configuration
-  vector_search {
-    algorithms {
-      name                     = "hnsw-algorithm"
-      kind                     = "hnsw"
-    }
-
-    profiles {
-      name                     = "vector-profile"
-      algorithm_configuration_name = "hnsw-algorithm"
-    }
-  }
-
-  # Semantic search configuration
-  semantic_search {
-    default_configuration_name = "semantic-config"
-
-    configurations {
-      name = "semantic-config"
-
-      prioritized_fields {
-        title_field {
-          field_name = "title"
-        }
-
-        content_fields {
-          field_name = "content"
-        }
+# Create a local file with the index definition for later use
+resource "local_file" "search_index_definition" {
+  content = jsonencode({
+    name = var.index_name
+    fields = [
+      {
+        name = "id"
+        type = "Edm.String"
+        key = true
+        searchable = false
+        filterable = true
+        retrievable = true
+        sortable = false
+        facetable = false
+      },
+      {
+        name = "title"
+        type = "Edm.String"
+        searchable = true
+        filterable = true
+        retrievable = true
+        sortable = true
+        facetable = false
+        analyzer = "standard.lucene"
+      },
+      {
+        name = "content"
+        type = "Edm.String"
+        searchable = true
+        filterable = false
+        retrievable = true
+        sortable = false
+        facetable = false
+        analyzer = "standard.lucene"
+      },
+      {
+        name = "chunk_id"
+        type = "Edm.String"
+        searchable = false
+        filterable = true
+        retrievable = true
+        sortable = false
+        facetable = false
+      },
+      {
+        name = "article_id"
+        type = "Edm.String"
+        searchable = false
+        filterable = true
+        retrievable = true
+        sortable = false
+        facetable = true
+      },
+      {
+        name = "security"
+        type = "Edm.String"
+        searchable = false
+        filterable = true
+        retrievable = true
+        sortable = false
+        facetable = true
+      },
+      {
+        name = "source_url"
+        type = "Edm.String"
+        searchable = false
+        filterable = false
+        retrievable = true
+        sortable = false
+        facetable = false
+      },
+      {
+        name = "created_date"
+        type = "Edm.DateTimeOffset"
+        searchable = false
+        filterable = true
+        retrievable = true
+        sortable = true
+        facetable = false
+      },
+      {
+        name = "embedding"
+        type = "Collection(Edm.Single)"
+        searchable = true
+        filterable = false
+        retrievable = false
+        sortable = false
+        facetable = false
+        dimensions = var.embedding_dimensions
       }
+    ]
+    vectorSearch = {
+      algorithms = [
+        {
+          name = "hnsw-algorithm"
+          kind = "hnsw"
+        }
+      ]
+      profiles = [
+        {
+          name = "vector-profile"
+          algorithmConfigurationName = "hnsw-algorithm"
+        }
+      ]
     }
-  }
+    semantic = {
+      defaultConfiguration = "semantic-config"
+      configurations = [
+        {
+          name = "semantic-config"
+          prioritizedFields = {
+            titleField = { fieldName = "title" }
+            contentFields = [{ fieldName = "content" }]
+          }
+        }
+      ]
+    }
+  })
+  filename = "${path.module}/search_index_${var.index_name}.json"
 }

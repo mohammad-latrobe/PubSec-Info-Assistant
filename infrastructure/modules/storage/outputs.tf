@@ -8,6 +8,12 @@ output "storage_account_name" {
   value       = azurerm_storage_account.main.name
 }
 
+output "primary_access_key" {
+  description = "Primary access key of the storage account"
+  value       = azurerm_storage_account.main.primary_access_key
+  sensitive   = true
+}
+
 output "primary_blob_endpoint" {
   description = "Primary blob endpoint of the storage account"
   value       = azurerm_storage_account.main.primary_blob_endpoint

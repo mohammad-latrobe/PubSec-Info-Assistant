@@ -1,5 +1,5 @@
-# Deployment Script for LaTrobe University Information Assistant - Steps 1 & 2
-# This script creates the required Azure resources for the LaTrobe implementation
+# Deployment Script for PubSec Information Assistant - Steps 1 & 2
+# This script creates the required Azure resources for the simplified implementation
 
 param(
     [Parameter(Mandatory=$true)]
@@ -12,7 +12,7 @@ param(
     [string]$SubscriptionId,
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectPrefix = "ltu-troby"
+    [string]$ProjectPrefix = "pubsec-ia"
 )
 
 # Set subscription if provided
@@ -20,7 +20,7 @@ if ($SubscriptionId) {
     az account set --subscription $SubscriptionId
 }
 
-Write-Host "Starting deployment of LaTrobe University Information Assistant..." -ForegroundColor Green
+Write-Host "Starting deployment of PubSec Information Assistant simplified version..." -ForegroundColor Green
 
 # Generate unique names
 $timestamp = Get-Date -Format "yyyyMMddHHmm"
@@ -137,7 +137,11 @@ $openAIEndpoint = az cognitiveservices account show --name $openAIServiceName --
 Write-Host "Configuring Function App settings..." -ForegroundColor Yellow
 az functionapp config appsettings set --name $functionAppName --resource-group $ResourceGroupName --settings `
     "BLOB_STORAGE_ACCOUNT_ENDPOINT=$storageEndpoint" `
+    "BLOB_STORAGE_ACCOUNT_OUTPUT_CONTAINER_NAME=content" `
     "BLOB_CONTENT_CONTAINER_NAME=content" `
+    "AZURE_QUEUE_STORAGE_ENDPOINT=$storageEndpoint" `
+    "NON_PDF_SUBMIT_QUEUE=non-pdf-submit-queue" `
+    "AZURE_OPENAI_AUTHORITY_HOST=AzurePublicCloud" `
     "AZURE_SEARCH_SERVICE_ENDPOINT=$searchEndpoint" `
     "AZURE_SEARCH_INDEX=kb-articles-index" `
     "AZURE_OPENAI_ENDPOINT=$openAIEndpoint" `

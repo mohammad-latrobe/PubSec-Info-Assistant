@@ -1,4 +1,16 @@
-# Environment Configuration Variables
+# Environment Configuration Variables - Microsoft PubSec-IA Compatible
+variable "environmentName" {
+  description = "Name of the environment which is used to generate a short unique hash used in all resources"
+  type        = string
+  default     = "dev"
+}
+
+variable "buildNumber" {
+  description = "Build number for tracking deployments"
+  type        = string
+  default     = "local"
+}
+
 variable "environment" {
   description = "Environment name (dev, staging, prod)"
   type        = string
@@ -8,20 +20,26 @@ variable "environment" {
 variable "project_name" {
   description = "Name of the project"
   type        = string
-  default     = "PubSec Information Assistant"
+  default     = "LaTrobe University Information Assistant"
 }
 
 variable "project_prefix" {
   description = "Prefix for resource names"
   type        = string
-  default     = "pubsec-ia"
+  default     = "ltu-troby"
   validation {
     condition     = length(var.project_prefix) <= 10 && can(regex("^[a-z0-9-]+$", var.project_prefix))
     error_message = "Project prefix must be 10 characters or less and contain only lowercase letters, numbers, and hyphens."
   }
 }
 
-# Resource Group Configuration
+# Resource Group Configuration - Microsoft PubSec-IA Compatible
+variable "resourceGroupName" {
+  description = "Name of the resource group"
+  type        = string
+  default     = ""
+}
+
 variable "resource_group_name" {
   description = "Name of the resource group"
   type        = string
@@ -209,4 +227,67 @@ variable "tags" {
     CostCenter = "12345"
     Owner      = "DevOps Team"
   }
+}
+
+# Microsoft PubSec-IA Feature Flags
+variable "enableWebChat" {
+  description = "Enable web chat functionality"
+  type        = bool
+  default     = true
+}
+
+variable "enableUngroundedChat" {
+  description = "Enable ungrounded chat functionality"
+  type        = bool
+  default     = false
+}
+
+variable "enableMathAssitant" {
+  description = "Enable math assistant functionality"
+  type        = bool
+  default     = true
+}
+
+variable "enableTabularDataAssistant" {
+  description = "Enable tabular data assistant functionality"
+  type        = bool
+  default     = true
+}
+
+variable "enableSharePointConnector" {
+  description = "Enable SharePoint connector functionality"
+  type        = bool
+  default     = false
+}
+
+variable "enableBingSafeSearch" {
+  description = "Enable Bing safe search functionality"
+  type        = bool
+  default     = true
+}
+
+# Microsoft PubSec-IA Security Configuration
+variable "requireWebsiteSecurityMembership" {
+  description = "Require website security membership"
+  type        = bool
+  default     = false
+}
+
+variable "cuaEnabled" {
+  description = "Enable Customer Usage Attribution"
+  type        = bool
+  default     = false
+}
+
+variable "cuaId" {
+  description = "Customer Usage Attribution ID"
+  type        = string
+  default     = ""
+}
+
+# Azure Environment Configuration
+variable "azure_environment" {
+  description = "The Azure Environment to target"
+  type        = string
+  default     = "AzureCloud"
 }

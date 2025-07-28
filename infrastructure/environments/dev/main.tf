@@ -52,7 +52,7 @@ locals {
   })
 
   # Resource naming with unique suffix
-  storage_account_name    = "${var.project_prefix}st${random_integer.suffix.result}"
+  storage_account_name    = "${replace(var.project_prefix, "-", "")}st${random_integer.suffix.result}"
   function_app_name      = "${var.project_prefix}-func-${var.environment}-${random_integer.suffix.result}"
   search_service_name    = "${var.project_prefix}-search-${var.environment}-${random_integer.suffix.result}"
   openai_service_name    = "${var.project_prefix}-openai-${var.environment}-${random_integer.suffix.result}"
@@ -117,6 +117,7 @@ module "azure_functions" {
   sku_name                   = var.function_sku
   python_version             = var.python_version
   storage_account_name       = module.storage.storage_account_name
+  storage_account_access_key = module.storage.primary_access_key
   cors_allowed_origins       = var.cors_allowed_origins
 
   # Service endpoints

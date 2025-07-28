@@ -40,8 +40,8 @@ resource "azurerm_cognitive_deployment" "text_embedding" {
     version = var.embedding_model_version
   }
 
-  sku {
-    name     = var.scale_type
+  scale {
+    type     = var.scale_type
     capacity = var.embedding_capacity
   }
 }
@@ -58,8 +58,8 @@ resource "azurerm_cognitive_deployment" "gpt_model" {
     version = var.gpt_model_version
   }
 
-  sku {
-    name     = var.scale_type
+  scale {
+    type     = var.scale_type
     capacity = var.gpt_capacity
   }
 }

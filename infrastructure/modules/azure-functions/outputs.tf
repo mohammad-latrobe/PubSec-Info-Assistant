@@ -36,6 +36,6 @@ output "service_plan_id" {
 }
 
 output "function_storage_account_name" {
-  description = "Name of the function app storage account (if created)"
-  value       = var.storage_account_name != null ? var.storage_account_name : azurerm_storage_account.function_storage[0].name
+  description = "Name of the function app storage account"
+  value       = var.storage_account_name
 }

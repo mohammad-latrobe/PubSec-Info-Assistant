@@ -19,8 +19,13 @@ output "search_service_principal_id" {
 }
 
 output "search_index_name" {
-  description = "Name of the search index"
-  value       = azurerm_search_index.kb_articles.name
+  description = "Name of the search index (to be created manually)"
+  value       = var.index_name
+}
+
+output "search_index_definition_file" {
+  description = "Path to the search index definition file"
+  value       = local_file.search_index_definition.filename
 }
 
 output "primary_key" {

@@ -22,16 +22,17 @@ resource "azurerm_service_plan" "main" {
 }
 
 # Storage Account for Function App (if not provided)
-resource "azurerm_storage_account" "function_storage" {
-  count                    = var.storage_account_name == null ? 1 : 0
-  name                     = "${var.function_app_name}st${random_integer.suffix.result}"
-  resource_group_name      = var.resource_group_name
-  location                 = var.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  
-  tags = var.tags
-}
+# Note: We'll always use the main storage account passed as a variable
+# resource "azurerm_storage_account" "function_storage" {
+#   count                    = var.storage_account_name == null ? 1 : 0
+#   name                     = "${var.function_app_name}st${random_integer.suffix.result}"
+#   resource_group_name      = var.resource_group_name
+#   location                 = var.location
+#   account_tier             = "Standard"
+#   account_replication_type = "LRS"
+#   
+#   tags = var.tags
+# }
 
 resource "random_integer" "suffix" {
   min = 1000
@@ -55,8 +56,8 @@ resource "azurerm_linux_function_app" "main" {
   location            = var.location
   service_plan_id     = azurerm_service_plan.main.id
 
-  storage_account_name       = var.storage_account_name != null ? var.storage_account_name : azurerm_storage_account.function_storage[0].name
-  storage_account_access_key = var.storage_account_name != null ? var.storage_account_access_key : azurerm_storage_account.function_storage[0].primary_access_key
+  storage_account_name       = var.storage_account_name
+  storage_account_access_key = var.storage_account_access_key
 
   # Function App configuration
   site_config {

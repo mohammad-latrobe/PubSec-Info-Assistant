@@ -23,7 +23,7 @@ resource "azurerm_storage_account" "main" {
   https_traffic_only_enabled       = true
   min_tls_version                  = "TLS1_2"
   allow_nested_items_to_be_public  = false
-  shared_access_key_enabled        = false
+  shared_access_key_enabled        = true  # Required for Azure Functions
 
   # Blob properties
   blob_properties {
@@ -43,19 +43,19 @@ resource "azurerm_storage_account" "main" {
 
 # Storage Containers
 resource "azurerm_storage_container" "content" {
-  name                 = "content"
-  storage_account_id   = azurerm_storage_account.main.id
+  name                  = "content"
+  storage_account_name  = azurerm_storage_account.main.name
   container_access_type = "private"
 }
 
 resource "azurerm_storage_container" "upload" {
-  name                 = "upload"
-  storage_account_id   = azurerm_storage_account.main.id
+  name                  = "upload"
+  storage_account_name  = azurerm_storage_account.main.name
   container_access_type = "private"
 }
 
 resource "azurerm_storage_container" "logs" {
-  name                 = "logs"
-  storage_account_id   = azurerm_storage_account.main.id
+  name                  = "logs"
+  storage_account_name  = azurerm_storage_account.main.name
   container_access_type = "private"
 }

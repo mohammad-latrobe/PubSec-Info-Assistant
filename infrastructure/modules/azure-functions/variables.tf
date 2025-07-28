@@ -43,15 +43,13 @@ variable "python_version" {
 }
 
 variable "storage_account_name" {
-  description = "Name of the storage account for the function app (optional, will create if not provided)"
+  description = "Name of the storage account for the function app"
   type        = string
-  default     = null
 }
 
 variable "storage_account_access_key" {
-  description = "Access key for the storage account (required if storage_account_name is provided)"
+  description = "Access key for the storage account"
   type        = string
-  default     = null
   sensitive   = true
 }
 
