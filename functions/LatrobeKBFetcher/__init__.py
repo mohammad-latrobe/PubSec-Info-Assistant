@@ -47,9 +47,12 @@ else:
 
 def fetch_latrobe_articles() -> List[Dict[str, Any]]:
     """Fetch articles from LaTrobe API"""
-    if not KNOWLEDGE_BASE_API_URL or not APIM_SUBSCRIPTION_KEY:
+    # Check if API is properly configured (not placeholder values)
+    if (not KNOWLEDGE_BASE_API_URL or not APIM_SUBSCRIPTION_KEY or 
+        APIM_SUBSCRIPTION_KEY == "your-apim-subscription-key-here" or
+        len(APIM_SUBSCRIPTION_KEY) < 10):
         # Create test data if API not configured
-        logging.warning(f"{FUNCTION_NAME} - API not configured, using test data")
+        logging.warning(f"{FUNCTION_NAME} - API not configured or using placeholder values, using test data")
         return [{
             "id": "test-001",
             "title": "Test KB Article",
@@ -68,9 +71,9 @@ def fetch_latrobe_articles() -> List[Dict[str, Any]]:
         }
         
         params = {
-            'name': KB_NAME_FILTER,
-            'active': KB_ACTIVE_FILTER,
-            'status': KB_STATUS_FILTER
+            'Name': KB_NAME_FILTER,
+            'Active': KB_ACTIVE_FILTER,
+            'Status_IN': KB_STATUS_FILTER
         }
         
         response = requests.get(KNOWLEDGE_BASE_API_URL, headers=headers, params=params)

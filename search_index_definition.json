@@ -1,0 +1,89 @@
+{
+  "name": "kb-articles-index",
+  "fields": [
+    {
+      "name": "id",
+      "type": "Edm.String",
+      "key": true,
+      "retrievable": true,
+      "searchable": false,
+      "filterable": true,
+      "sortable": false,
+      "facetable": false
+    },
+    {
+      "name": "title",
+      "type": "Edm.String",
+      "retrievable": true,
+      "searchable": true,
+      "filterable": true,
+      "sortable": true,
+      "facetable": false,
+      "analyzer": "standard.lucene"
+    },
+    {
+      "name": "content",
+      "type": "Edm.String",
+      "retrievable": true,
+      "searchable": true,
+      "filterable": false,
+      "sortable": false,
+      "facetable": false,
+      "analyzer": "standard.lucene"
+    },
+    {
+      "name": "url",
+      "type": "Edm.String",
+      "retrievable": true,
+      "searchable": false,
+      "filterable": true,
+      "sortable": false,
+      "facetable": false
+    },
+    {
+      "name": "category",
+      "type": "Edm.String",
+      "retrievable": true,
+      "searchable": true,
+      "filterable": true,
+      "sortable": true,
+      "facetable": true
+    },
+    {
+      "name": "status",
+      "type": "Edm.String",
+      "retrievable": true,
+      "searchable": false,
+      "filterable": true,
+      "sortable": false,
+      "facetable": true
+    },
+    {
+      "name": "source",
+      "type": "Edm.String",
+      "retrievable": true,
+      "searchable": false,
+      "filterable": true,
+      "sortable": false,
+      "facetable": true
+    },
+    {
+      "name": "created_date",
+      "type": "Edm.DateTimeOffset",
+      "retrievable": true,
+      "searchable": false,
+      "filterable": true,
+      "sortable": true,
+      "facetable": false
+    },
+    {
+      "name": "metadata",
+      "type": "Edm.String",
+      "retrievable": true,
+      "searchable": true,
+      "filterable": false,
+      "sortable": false,
+      "facetable": false
+    }
+  ]
+}
